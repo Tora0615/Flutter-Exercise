@@ -1,16 +1,29 @@
 # cupertino_widgets
 
-A new Flutter application.
+此次主要在練習 Cupertino 風格的 widgets 
 
-## Getting Started
+### 結果樣式預覽
+![](.README_images/01.png)
 
-This project is a starting point for a Flutter application.
+### CupertinoTabScaffold 用法簡述
+```dart= 
+// Tab Bar 外必用的 scaffold
+CupertinoTabScaffold(
 
-A few resources to get you started if this is your first Flutter project:
+  // BottomNavigationBarItem 的 List
+  tabBar : tabBar,
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+  //用以回傳對應 index 的頁面
+  tabBuilder : tabBuilder,  
+)
+```
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### CupertinoPageScaffold 用法簡述
+```dart=
+//頁面的scaffold
+CupertinoPageScaffold(
+    navigationBar: CupertinoNavigationBar(),  // 上面那條，似 AppBar
+    child: child,
+);
+```
+
