@@ -8,4 +8,22 @@ import 'package:sqflite/sqflite.dart';
 class DBProvider{
   // 私有構造函數
   DBProvider._();
+
+  // 單例模式 (唯一產生的物件)
+  static final DBProvider db = DBProvider._();
+
+  // 私有 database 變數，後續呼叫要加底線
+  Database? _database;  //多加了 ? (null safety)
+
+  // 獲取 database
+  Future<Database> get database async{
+    if(_database != null){   // db 存在就 return
+      return _database!;  //多加了 ! (null safety)
+    }
+    else{  // db 不存在就呼叫 initDB 創造，再return
+      _database = await initDB();
+      return _database!;  //多加了 ! (null safety)
+    }
+  }
+
 }
