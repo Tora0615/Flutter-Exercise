@@ -41,5 +41,7 @@ class DBProvider {
     });
   }
 
-  
+  insertClient (Client newClient) async {
+    final db = await database;
+  }
 }
