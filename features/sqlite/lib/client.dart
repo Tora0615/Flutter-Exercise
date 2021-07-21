@@ -27,5 +27,5 @@ class Client{
       "sex" : sex,
     };
   }
-  
+
 }

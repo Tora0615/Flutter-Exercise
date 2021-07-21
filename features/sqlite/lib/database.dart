@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-//import 'client.dart';
+import 'client.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DBProvider {
@@ -27,21 +27,43 @@ class DBProvider {
     }
   }
 
+  //初始化資料庫
   initDB() async {
+    //獲取文檔目錄對象 (Android : data/data/<package_name>/database. iOS : Document 目錄 )
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
+
+    // 路徑變數的整合
+    // 例子 : p.join('path', 'to', 'foo');  -> 'path/to/foo'
     String path = join(documentsDirectory.path, "client.db");
-    return await openDatabase(path, version: 1, onOpen: (db) {},
-        onCreate: (Database db, int version) async {
-      await db.execute("CREATE TABLE Client ("
-          "id INTERGER PRIMARY KEY,"
-          "name TEXT,"
-          "age INTERGER,"
-          "sex BIT"
-          ")");
-    });
+
+    return await openDatabase(
+      path,
+      version: 1,
+      onCreate: (Database db, int version) async {
+        // 創一個名為 Client 的 DB
+        await db.execute("CREATE TABLE Client ("
+            "id INTERGER PRIMARY KEY,"
+            "name TEXT,"
+            "age INTERGER,"
+            "sex BIT"
+            ")");
+      },
+    );
   }
 
-  insertClient (Client newClient) async {
+  //新增Client
+  insertClient(Client newClient) async {
     final db = await database;
+    var table = await db.rawQuery("SELECT MAX(id)+1 as id FROM Client");
+    int id = table.first["id"];
+
+    var raw = await db.rawInsert(
+      "INSERT Into Client (id,name,age,sex)"
+      "VALUES (?,?,?,?)",
+      [id, newClient.name, newClient.age, newClient.sex]
+    );
+
+    print ("raw" + raw.toString());
+    return raw;
   }
 }
