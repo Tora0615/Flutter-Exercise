@@ -14,7 +14,7 @@ class Client{
       id : json["id"],
       name : json["name"],
       age: json["age"],
-      sex: json["sex"],
+      sex: json["sex"] == 1,
     );
   }
 

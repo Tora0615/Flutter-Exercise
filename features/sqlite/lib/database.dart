@@ -39,6 +39,7 @@ class DBProvider {
     return await openDatabase(
       path,
       version: 1,
+      onOpen: (db){},
       onCreate: (Database db, int version) async {
         // 創一個名為 Client 的 DB
         await db.execute("CREATE TABLE Client ("
@@ -57,7 +58,9 @@ class DBProvider {
 
     // rawQuery 是直接用 SQL 語句查詢
     var table = await db.rawQuery("SELECT MAX(id)+1 as id FROM Client");
-    var id = table.first["id"];
+
+    // table.first["id"] 一開始是 null
+    int id = table.first["id"] == null ? 0 : table.first["id"] as int;
 
     var raw = await db.rawInsert(
         "INSERT Into Client (id,name,age,sex)"
