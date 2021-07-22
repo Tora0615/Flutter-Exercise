@@ -46,7 +46,7 @@ class DBProvider {
             "id INTERGER PRIMARY KEY,"
             "name TEXT,"
             "age INTERGER,"
-            "sex BIT"
+            "sex BIT"  // 注意是 bit
             ")");
       },
     );
@@ -59,44 +59,47 @@ class DBProvider {
     // rawQuery 是直接用 SQL 語句查詢
     var table = await db.rawQuery("SELECT MAX(id)+1 as id FROM Client");
 
-    // table.first["id"] 一開始是 null
+    // table.first["id"] 一開始是 null，因此最一開始要有初值
     int id = table.first["id"] == null ? 0 : table.first["id"] as int;
 
     var raw = await db.rawInsert(
         "INSERT Into Client (id,name,age,sex)"
-        "VALUES (?,?,?,?)",
+        "VALUES (?,?,?,?)",  // ? 為佔位符號
         [id, newClient.name, newClient.age, newClient.sex]);
 
-    print("raw" + raw.toString());
     return raw;
   }
 
+  // 更新性別
   updateSex(Client client) async {
     final db = await database;
     Client tempClient = Client(
       id: client.id,
       name: client.name,
       age: client.age,
-      sex: !client.sex!, //反轉性別
+      sex: !client.sex!, //反轉性別；true 男 (1=1)
     );
     var res = await db.update("Client", tempClient.toMap(),
         where: "id = ?", whereArgs: [client.id]);
     return res;
   }
 
+  // 更新 Client (沒用到)
   updateClient (Client newClient) async {
     final db = await database;
     var res = await db.update("Client", newClient.toMap(),
         where: "id = ?", whereArgs: [newClient.id]);
     return res;
   }
-  
+
+  // 用 id 獲取 Client (沒用到)
   getClient(int id) async {
     final db = await database;
     var res = await db.query("Client", where: "id = ?",whereArgs: [id] );
     return res.isNotEmpty ? Client.fromMap(res.first) : null ;
   }
 
+  // 獲取所有 Client
   Future<List<Client>> getAllClients() async {
     final db = await database;
     var res = await db.query("Client");
@@ -107,11 +110,13 @@ class DBProvider {
     return list;
   }
 
+  // 刪除 Client
   deleteClient(int id) async{
     final db = await database;
     return db.delete("Client", where: "id = ?", whereArgs: [id]);
   }
 
+  // 刪除所有 Client (沒用到)
   deleteAll() async{
     final db = await database;
     db.rawDelete("Delete * from Client");
@@ -122,3 +127,6 @@ class DBProvider {
 // 參考
 // SQLiteDatabase query 和 rawQuery 的区别
 // https://blog.csdn.net/chaoyu168/article/details/50350392
+
+// flutter: A value of type ‘dynamic‘ can‘t be assigned to a variable of type ‘int‘.
+// https://blog.csdn.net/Crystal_xing/article/details/110381322
