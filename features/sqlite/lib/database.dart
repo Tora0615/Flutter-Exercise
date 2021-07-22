@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-//import 'client.dart';
+import 'client.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DBProvider {
@@ -27,21 +27,106 @@ class DBProvider {
     }
   }
 
+  //初始化資料庫
   initDB() async {
+    //獲取文檔目錄對象 (Android : data/data/<package_name>/database. iOS : Document 目錄 )
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
+
+    // 路徑變數的整合
+    // 例子 : p.join('path', 'to', 'foo');  -> 'path/to/foo'
     String path = join(documentsDirectory.path, "client.db");
-    return await openDatabase(path, version: 1, onOpen: (db) {},
-        onCreate: (Database db, int version) async {
-      await db.execute("CREATE TABLE Client ("
-          "id INTERGER PRIMARY KEY,"
-          "name TEXT,"
-          "age INTERGER,"
-          "sex BIT"
-          ")");
-    });
+
+    return await openDatabase(
+      path,
+      version: 1,
+      onOpen: (db){},
+      onCreate: (Database db, int version) async {
+        // 創一個名為 Client 的 DB
+        await db.execute("CREATE TABLE Client ("
+            "id INTERGER PRIMARY KEY,"
+            "name TEXT,"
+            "age INTERGER,"
+            "sex BIT"  // 注意是 bit
+            ")");
+      },
+    );
   }
 
-  insertClient (Client newClient) async {
+  //新增Client
+  insertClient(Client newClient) async {
     final db = await database;
+
+    // rawQuery 是直接用 SQL 語句查詢
+    var table = await db.rawQuery("SELECT MAX(id)+1 as id FROM Client");
+
+    // table.first["id"] 一開始是 null，因此最一開始要有初值
+    int id = table.first["id"] == null ? 0 : table.first["id"] as int;
+
+    var raw = await db.rawInsert(
+        "INSERT Into Client (id,name,age,sex)"
+        "VALUES (?,?,?,?)",  // ? 為佔位符號
+        [id, newClient.name, newClient.age, newClient.sex]);
+
+    return raw;
   }
+
+  // 更新性別
+  updateSex(Client client) async {
+    final db = await database;
+    Client tempClient = Client(
+      id: client.id,
+      name: client.name,
+      age: client.age,
+      sex: !client.sex!, //反轉性別；true 男 (1=1)
+    );
+    var res = await db.update("Client", tempClient.toMap(),
+        where: "id = ?", whereArgs: [client.id]);
+    return res;
+  }
+
+  // 更新 Client (沒用到)
+  updateClient (Client newClient) async {
+    final db = await database;
+    var res = await db.update("Client", newClient.toMap(),
+        where: "id = ?", whereArgs: [newClient.id]);
+    return res;
+  }
+
+  // 用 id 獲取 Client (沒用到)
+  getClient(int id) async {
+    final db = await database;
+    var res = await db.query("Client", where: "id = ?",whereArgs: [id] );
+    return res.isNotEmpty ? Client.fromMap(res.first) : null ;
+  }
+
+  // 獲取所有 Client
+  Future<List<Client>> getAllClients() async {
+    final db = await database;
+    var res = await db.query("Client");
+
+    // 將 res 這可迭代的東東，利用.map，經內部function逐一轉換處理，
+    // 再把迭代處理完這坨利用.toList()轉型成List
+    List<Client> list = res.isNotEmpty ? res.map((e) => Client.fromMap(e)).toList() : [] ;
+    return list;
+  }
+
+  // 刪除 Client
+  deleteClient(int id) async{
+    final db = await database;
+    return db.delete("Client", where: "id = ?", whereArgs: [id]);
+  }
+
+  // 刪除所有 Client (沒用到)
+  deleteAll() async{
+    final db = await database;
+    db.rawDelete("Delete * from Client");
+  }
+
 }
+
+// 參考
+// SQLiteDatabase query 和 rawQuery 的区别
+// https://blog.csdn.net/chaoyu168/article/details/50350392
+
+// flutter: A value of type ‘dynamic‘ can‘t be assigned to a variable of type ‘int‘.
+// https://blog.csdn.net/Crystal_xing/article/details/110381322
