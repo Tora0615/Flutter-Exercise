@@ -9,7 +9,7 @@ Flutter 動畫
     * 用code難以達成的動畫
         * 像是圓圈轉一圈完成打個勾
 
-        ![](https://i.imgur.com/sv1LRUO.png =30%x)
+        ![](https://i.imgur.com/sv1LRUO.png)
     * 建議使用 Rive、Lottie 或其他第三方工具
     * 不在此次討論中
 * Code-based animations
@@ -34,7 +34,7 @@ Flutter 動畫
 * 是否有多個 widget 要同時撥放動畫 ? 
     * 例如 : 
 
-    ![](https://i.imgur.com/yJGjLEk.png =30%x)
+    ![](https://i.imgur.com/yJGjLEk.png)
 * 若以上三者任何一個為 **是**，則需要用**顯式動畫**
 
 ## Code-based animations 決策樹
