@@ -92,17 +92,33 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   }
 }
 
+
+// 抽出的 Animation widget，其繼承自 AnimatedWidget，
+// 而非 stateless / stateful widget。
 class BeamTransition extends AnimatedWidget {
 
   BeamTransition({
     Key? key,
-    required Animation<double> animation,
-  }) : super(key: key, listenable: animation);
+    required Animation<double> animation,   // 建構子傳入名為 animation 的 Animation<double> 型態資料
+  }) : super(key: key, listenable: animation);  // 並且把此 animation 的值賦予名為 listenable 的變數
 
 
   @override
   Widget build(BuildContext context) {
+
+    // 在 build 中設定 animation 變數為 listenable 的值
     final Animation<double> animation = listenable as Animation<double>;
+    // 若遇到 A value of type 'Listenable' can't be assigned to a variable of type 'Animation<double>'.的錯誤，
+    // 可在後面加 as Animation<double>;
+
+    // 疑惑 1 :
+    // 為啥不在抽出的 widget 中新增 animation controller ...等 ? 是因為效能問題 ?
+    //
+    // 疑惑 2 :
+    // 為啥 final Animation<double> animation = listenable as Animation<double>;
+    // 不宣告此 class 中的全域變數 ? 之後再從 build 來調用 ?
+    // 是因為要能夠一直變動 ?
+
     return ClipPath(
       clipper: const BeamClipper(),
       child: Container(
