@@ -51,16 +51,27 @@ Flutter Web 筆記
 
 
 
-# 其他參考資料們
+# 一些除錯紀錄
 
 ## flutter build web时提示“Missing index.html
+在 Android Studio 中打開終端機，輸入`flutter create .`，其會先將專案加入 web 資料夾與相關檔案，之後就能用`flutter build web`指令，建構網站了。
+
+
+### 參考資料
 [flutter build web时提示“Missing index.html](https://blog.csdn.net/u010568616/article/details/115241609)
 
 ## 解決 Flutter Web 上傳 Github Page 無內容顯示的問題
+
+更改專案目錄中檔案 /web/index.html 的 `<base href="/">` 為  `<base href="./">` 或是 `<base href="/{$YourRepositoryName}/">`
+
+
+### 參考資料
 1. [404 Failed to load resource Deploying Flutter Web App to GitHub Pages](https://stackoverflow.com/questions/65689346/404-failed-to-load-resource-deploying-flutter-web-app-to-github-pages)
 
 2. [How to Setup Flutter Web With GitHub Pages [3 Step Tutorial] - #2 Flutter Web Tutorial Series](https://www.youtube.com/watch?v=YfNC0QiYNB8&ab_channel=FlorianPr%C3%BCmer)
 
+
+# 其他參考資料們
 
 ## Flutter Web 結合 GitHub Actions 發布 Github Pages 網站
 [使用Flutter Web和GitHub Actions构建发布自己的Github Pages网站](https://www.jianshu.com/p/b4b4b6dc5a5c)
