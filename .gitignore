@@ -122,7 +122,7 @@ captures/
 .externalNativeBuild
 
 # Google Services (e.g. APIs or Firebase)
-google-services.json
+# google-services.json #正式的不要上傳
 
 # Freeline
 freeline.py
@@ -385,7 +385,7 @@ captures/
 .externalNativeBuild
 
 # Google Services (e.g. APIs or Firebase)
-google-services.json
+# google-services.json #正式的不要上傳
 
 # Freeline
 freeline.py
