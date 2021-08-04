@@ -1,5 +1,7 @@
 ### Flutter Generated
 
+*flutter_export_environment.sh
+
 # Miscellaneous
 *.class
 *.lock
