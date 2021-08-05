@@ -18,7 +18,7 @@ class AuthService {
   Stream<CustomUser?> get user {  // 這是 class 使用 getter，可以在外部直接這樣呼叫 : AuthService.user。相關用法有 setter
     return _auth
         .authStateChanges()  // 與影片不同，舊的是 onAuthStateChange()
-        .map(_userFormFirebaseUser); // 等同於 .map((User? user) => _userFormFirebaseUser(user));
+        .map(_userFormFirebaseUser); // 等同於 .map((User? user) => _userFormFirebaseUser(user));  每次將 User 映射到 CustomUser
   }
 
   // sign in anon (anonymous)
