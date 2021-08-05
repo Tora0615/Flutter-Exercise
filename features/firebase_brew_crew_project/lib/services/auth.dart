@@ -15,9 +15,9 @@ class AuthService {
   // 回傳值 CustomUser? : 因為可能回傳 null ，因此要加 "?" 。
 
   // auth change user stream
-  Stream<CustomUser?> get user {
+  Stream<CustomUser?> get user {  // 這是 class 使用 getter，可以在外部直接這樣呼叫 : AuthService.user。相關用法有 setter
     return _auth
-        .authStateChanges()
+        .authStateChanges()  // 與影片不同，舊的是 onAuthStateChange()
         .map(_userFormFirebaseUser); // 等同於 .map((User? user) => _userFormFirebaseUser(user));
   }
 
