@@ -26,12 +26,12 @@ class _SignInState extends State<SignIn> {
         child: ElevatedButton(
           child: Text("Sign in anonymous"),
           onPressed: () async{
-            dynamic result = await _auth.signInAnon();  // 可能回傳 user or null
+            dynamic result = await _auth.signInAnon();     // 可能回傳 user or null
             if(result == null){
               print("Singing in error");
             }else{
               print("signed in");
-              print(result);
+              print(result.uid);  // 原本 print(result);
             }
           },
         ),
