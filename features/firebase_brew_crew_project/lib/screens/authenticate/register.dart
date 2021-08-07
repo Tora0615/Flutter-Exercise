@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_brew_crew_project/services/auth.dart';
 
 class Register extends StatefulWidget {
-  const Register({Key? key}) : super(key: key);
+
+  final Function toggleView;
+  const Register({Key? key, required this.toggleView}) : super(key: key);
 
   @override
   _RegisterState createState() => _RegisterState();
@@ -24,6 +26,22 @@ class _RegisterState extends State<Register> {
         backgroundColor: Colors.brown[400],
         elevation: 0,
         title: Text("Brew Crew 帳號註冊"),
+        // appbar 按鈕
+        actions: [
+          TextButton.icon(
+            onPressed: () {
+              widget.toggleView();
+            },
+            icon: Icon(
+              Icons.person,
+              color: Colors.white,
+            ),
+            label: Text(
+              "登入",
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ],
       ),
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),

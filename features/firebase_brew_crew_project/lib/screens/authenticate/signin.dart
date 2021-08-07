@@ -2,7 +2,10 @@ import 'package:firebase_brew_crew_project/services/auth.dart';
 import 'package:flutter/material.dart';
 
 class SignIn extends StatefulWidget {
-  const SignIn({Key? key}) : super(key: key);
+
+  final Function toggleView ;
+
+  const SignIn({Key? key,required this.toggleView}) : super(key: key);
 
   @override
   _SignInState createState() => _SignInState();
@@ -23,6 +26,23 @@ class _SignInState extends State<SignIn> {
         backgroundColor: Colors.brown[400],
         elevation: 0,
         title: Text("Brew Crew 登入"),
+
+        // appbar 按鈕
+        actions: [
+          TextButton.icon(
+            onPressed: () {
+              widget.toggleView();
+            },
+            icon: Icon(
+              Icons.person,
+              color: Colors.white,
+            ),
+            label: Text(
+              "註冊",
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ],
       ),
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
@@ -38,8 +58,9 @@ class _SignInState extends State<SignIn> {
                 height: 20,
               ),
               TextFormField(
-                onChanged: (val) {  // 每次文字改變(新增、刪除等)
-                  email = val ;  // 影片有用 setState，但我覺得不用，目前可 print 出來
+                onChanged: (val) {
+                  // 每次文字改變(新增、刪除等)
+                  email = val; // 影片有用 setState，但我覺得不用，目前可 print 出來
                 },
               ),
               SizedBox(
@@ -47,8 +68,9 @@ class _SignInState extends State<SignIn> {
               ),
               TextFormField(
                 obscureText: true, // 輸入文字隱藏
-                onChanged: (val) {  // 每次文字改變(新增、刪除等)
-                  password = val ; // 影片有用 setState，但我覺得不用，目前可 print 出來
+                onChanged: (val) {
+                  // 每次文字改變(新增、刪除等)
+                  password = val; // 影片有用 setState，但我覺得不用，目前可 print 出來
                 },
               ),
               SizedBox(
