@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamProvider<CustomUser?>.value(  // 包住 root widget
-      initialData: null,  // provider 5.0.0 required
+      initialData: null,  // provider 5.0.0 required  // 或許之後能用資料庫暫存上次登入的內容
       value: AuthService().user,
       child: MaterialApp(
         home: Wrapper(),

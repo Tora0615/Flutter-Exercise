@@ -17,7 +17,11 @@ class Wrapper extends StatelessWidget {
     print(customUser);  //先印出來看看
 
     // return either Home or Authenticate widget
-    return Authenticate(); //Home()
+    if (customUser == null){  // customUser 為 null 代表還沒登入
+      return Authenticate();
+    }else{
+      return Home();
+    }
   }
 }
 
