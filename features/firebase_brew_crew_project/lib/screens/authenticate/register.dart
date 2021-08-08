@@ -56,14 +56,15 @@ class _RegisterState extends State<Register> {
         // 可以統一操作只能是 FormField 類型。
         // 參考 : https://book.flutterchina.club/chapter3/input_and_form.html#_3-7-1-textfield
         child: Form(
-          key:
-              _formKey, // 將 _formKey 與此 Form 做關聯。為其他 TextFormField 的 global key
+          // 將 _formKey 與此 Form 做關聯。
+          // 為其他 TextFormField 的 global key
+          key: _formKey,
           child: Column(
             children: [
               SizedBox(
                 height: 20,
               ),
-              TextFormField(
+              TextFormField(  // email 的 TextFormField
                 onChanged: (val) {
                   // 每次文字改變(新增、刪除等)
                   email = val; // 影片有用 setState，但我覺得不用，目前可 print 出來
@@ -82,7 +83,7 @@ class _RegisterState extends State<Register> {
               SizedBox(
                 height: 20,
               ),
-              TextFormField(
+              TextFormField(  // 密碼的的 TextFormField
                 obscureText: true, // 輸入文字隱藏
                 onChanged: (val) {
                   // 每次文字改變(新增、刪除等)
