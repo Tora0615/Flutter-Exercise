@@ -15,18 +15,20 @@ class AuthService {
   // 回傳值 CustomUser? : 因為可能回傳 null ，因此要加 "?" 。
 
   // auth change user stream
-  Stream<CustomUser?> get user {  // 這是 class 使用 getter，可以在外部直接這樣呼叫 : AuthService.user。相關用法有 setter
+  Stream<CustomUser?> get user {
+    // 這是 class 使用 getter，可以在外部直接這樣呼叫 : AuthService.user。相關用法有 setter
     return _auth
-        .authStateChanges()  // 與影片不同，舊的是 onAuthStateChange()
-        .map(_userFormFirebaseUser); // 等同於 .map((User? user) => _userFormFirebaseUser(user));  每次將 User 映射到 CustomUser
+        .authStateChanges() // 與影片不同，舊的是 onAuthStateChange()
+        .map(
+            _userFormFirebaseUser); // 等同於 .map((User? user) => _userFormFirebaseUser(user));  每次將 User 映射到 CustomUser
   }
 
   // sign in anon (anonymous)
   Future signInAnon() async {
     // 是個非同步事件，並且會回傳 Future
-    try {
-      //嘗試登入
+    try {  // 嘗試匿名登入
       // 呼叫匿名登入的 function
+      // 回傳的格式是 UserCredential Class 的類型
       UserCredential result = await _auth.signInAnonymously();
 
       //從 result 中取出 user
@@ -42,12 +44,26 @@ class AuthService {
   // sign in with email and password
 
   // register with email and password
+  Future registerWithEmailAndPassword({String? email, String? password}) async {
+    try {
+      UserCredential result = await _auth.createUserWithEmailAndPassword(
+        email: email!,
+        password: password!,
+      );
+      //從 result 中取出 user
+      User? user = result.user;
+      return _userFormFirebaseUser(user);
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
 
   // sign out
   Future signOut() async {
     try {
       return await _auth.signOut();
-    }catch(e){
+    } catch (e) {
       print(e.toString());
       return null;
     }
