@@ -144,7 +144,7 @@ class _RegisterState extends State<Register> {
                 error,
                 style: TextStyle(
                   color: Colors.red,
-                  fontSize: 16,
+                  fontSize: 18,
                 ),
               ),
             ],

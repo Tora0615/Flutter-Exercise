@@ -12,11 +12,19 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
+
   final AuthService _auth = AuthService();
+
+  // 用來持續追蹤此 form 與他的狀態。
+  // 未來如果嘗試驗證 form 的內容，就可以經由此 form key 達成。
+  // 因為利用此 key 就能訪問資料與狀態。
+  final _formKey = GlobalKey<FormState>();
 
   // Text field temp saving
   String email = "";
   String password = "";
+
+  String error = "";
 
   @override
   Widget build(BuildContext context) {
@@ -52,12 +60,20 @@ class _SignInState extends State<SignIn> {
         // 可以被統一操作的只能是 FormField 類型。
         // 參考 : https://book.flutterchina.club/chapter3/input_and_form.html#_3-7-1-textfield
         child: Form(
+          key: _formKey,
           child: Column(
             children: [
               SizedBox(
                 height: 20,
               ),
               TextFormField(
+                validator: (val) {
+                  if (val!.isEmpty) {
+                    return "請輸入 Email";
+                  } else {
+                    return null;
+                  }
+                },
                 onChanged: (val) {
                   // 每次文字改變(新增、刪除等)
                   email = val; // 影片有用 setState，但我覺得不用，目前可 print 出來
@@ -68,6 +84,13 @@ class _SignInState extends State<SignIn> {
               ),
               TextFormField(
                 obscureText: true, // 輸入文字隱藏
+                validator: (val) {
+                  if (val!.length < 6) {
+                    return "請輸入至少六位數的密碼";
+                  } else {
+                    return null;
+                  }
+                },
                 onChanged: (val) {
                   // 每次文字改變(新增、刪除等)
                   password = val; // 影片有用 setState，但我覺得不用，目前可 print 出來
@@ -85,9 +108,32 @@ class _SignInState extends State<SignIn> {
                   style: TextStyle(color: Colors.white),
                 ),
                 onPressed: () async {
-                  print(email);
-                  print(password);
+                  if (_formKey.currentState!.validate()) {
+
+                    //print("validate");
+                    dynamic result = await _auth.signInWithEmailAndPassword(
+                      email: email,
+                      password: password,
+                    );
+
+                    // 失敗
+                    if (result == null) {
+                      setState(() {
+                        error = "帳號或密碼錯誤";
+                      });
+                    }
+                  }
                 },
+              ),
+              SizedBox(
+                height: 12,
+              ),
+              Text( // 顯示錯誤訊息
+                error,
+                style: TextStyle(
+                  color: Colors.red,
+                  fontSize: 18,
+                ),
               ),
             ],
           ),
