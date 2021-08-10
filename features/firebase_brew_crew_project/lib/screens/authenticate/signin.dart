@@ -1,5 +1,6 @@
 import 'package:firebase_brew_crew_project/services/auth.dart';
 import 'package:flutter/material.dart';
+import '../../shared/constants.dart';
 
 class SignIn extends StatefulWidget {
 
@@ -67,6 +68,9 @@ class _SignInState extends State<SignIn> {
                 height: 20,
               ),
               TextFormField(
+                decoration: textInputDecoration.copyWith(
+                hintText: "請輸入 Email ",
+              ),
                 validator: (val) {
                   if (val!.isEmpty) {
                     return "請輸入 Email";
@@ -84,6 +88,9 @@ class _SignInState extends State<SignIn> {
               ),
               TextFormField(
                 obscureText: true, // 輸入文字隱藏
+                decoration: textInputDecoration.copyWith(
+                  hintText: "請輸入至少六位數的密碼",
+                ),
                 validator: (val) {
                   if (val!.length < 6) {
                     return "請輸入至少六位數的密碼";

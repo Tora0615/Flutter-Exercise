@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_brew_crew_project/services/auth.dart';
+import '../../shared/constants.dart';
 
 class Register extends StatefulWidget {
   final Function toggleView;
@@ -64,12 +65,15 @@ class _RegisterState extends State<Register> {
               SizedBox(
                 height: 20,
               ),
-              TextFormField(  // email 的 TextFormField
+              TextFormField(
+                // email 的 TextFormField
                 onChanged: (val) {
                   // 每次文字改變(新增、刪除等)
                   email = val; // 影片有用 setState，但我覺得不用，目前可 print 出來
                 },
-
+                decoration: textInputDecoration.copyWith(
+                  hintText: "請輸入 Email ",
+                ),
                 // validator 會回傳字串(輸入有問題)或null(輸入沒問題)，
                 // 此字串是會在螢幕上顯示的幫助文字。
                 validator: (val) {
@@ -83,13 +87,16 @@ class _RegisterState extends State<Register> {
               SizedBox(
                 height: 20,
               ),
-              TextFormField(  // 密碼的的 TextFormField
+              TextFormField(
+                // 密碼的的 TextFormField
                 obscureText: true, // 輸入文字隱藏
                 onChanged: (val) {
                   // 每次文字改變(新增、刪除等)
                   password = val; // 影片有用 setState，但我覺得不用，目前可 print 出來
                 },
-
+                decoration: textInputDecoration.copyWith(
+                  hintText: "請輸入至少六位數的密碼",
+                ),
                 // validator 會回傳字串(輸入有問題)或null(輸入沒問題)，
                 validator: (val) {
                   if (val!.length < 6) {
@@ -135,12 +142,11 @@ class _RegisterState extends State<Register> {
                   }
                 },
               ),
-
-
               SizedBox(
                 height: 12,
               ),
-              Text( // 顯示錯誤訊息
+              Text(
+                // 顯示錯誤訊息
                 error,
                 style: TextStyle(
                   color: Colors.red,
