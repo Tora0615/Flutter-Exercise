@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_brew_crew_project/services/auth.dart';
 import '../../shared/constants.dart';
+import '../../shared/loading.dart';
 
 class Register extends StatefulWidget {
   final Function toggleView;
@@ -24,9 +25,11 @@ class _RegisterState extends State<Register> {
 
   String error = "";
 
+  bool loading = false;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading ? Loading() : Scaffold(
       backgroundColor: Colors.brown[100],
       appBar: AppBar(
         backgroundColor: Colors.brown[400],
@@ -126,6 +129,9 @@ class _RegisterState extends State<Register> {
                   if (_formKey.currentState!.validate()) {
                     // print(email); // 測試用
                     // print(password);
+                    setState(() {
+                      loading = true;
+                    });
                     dynamic result = await _auth.registerWithEmailAndPassword(
                       email: email,
                       password: password,
@@ -135,6 +141,7 @@ class _RegisterState extends State<Register> {
                     if (result == null) {
                       setState(() {
                         error = "請輸入正常可用的 email";
+                        loading = false;
                       });
                     }
                     // 若註冊成功 -> 會自動登入並顯示 home page

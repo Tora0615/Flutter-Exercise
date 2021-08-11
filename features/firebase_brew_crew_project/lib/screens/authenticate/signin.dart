@@ -1,6 +1,7 @@
 import 'package:firebase_brew_crew_project/services/auth.dart';
 import 'package:flutter/material.dart';
 import '../../shared/constants.dart';
+import '../../shared/loading.dart';
 
 class SignIn extends StatefulWidget {
 
@@ -21,15 +22,19 @@ class _SignInState extends State<SignIn> {
   // 因為利用此 key 就能訪問資料與狀態。
   final _formKey = GlobalKey<FormState>();
 
-  // Text field temp saving
+  // Text field 暫存
   String email = "";
   String password = "";
 
+  // 錯誤訊息暫存
   String error = "";
+
+  // 是否顯現 loading 動畫
+  bool loading = false;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading ? Loading() : Scaffold(
       backgroundColor: Colors.brown[100],
       appBar: AppBar(
         backgroundColor: Colors.brown[400],
@@ -116,8 +121,13 @@ class _SignInState extends State<SignIn> {
                 ),
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
+                    //print("validate");  //測試用
 
-                    //print("validate");
+                    // 將 loading 設為 true 並重新繪製頁面
+                    setState(() {
+                      loading = true;
+                    });
+
                     dynamic result = await _auth.signInWithEmailAndPassword(
                       email: email,
                       password: password,
@@ -127,6 +137,7 @@ class _SignInState extends State<SignIn> {
                     if (result == null) {
                       setState(() {
                         error = "帳號或密碼錯誤";
+                        loading = false;
                       });
                     }
                   }
